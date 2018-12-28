@@ -14,9 +14,14 @@
     "commander": "^2.17.1",
     "safe-regex": "^1.1.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0",
+    "prettier": "^1.15.3"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha test/*.js",
+    "prettier": "prettier **/*.js --write"
   },
   "author": "Thomas Loiret",
   "license": "MIT",

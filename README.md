@@ -4,7 +4,7 @@
 
 # safe-regex-parser
 
-Detects potential catastrophic backtracking regular expressions. It aims to be simple to use with sane defaults.
+Parse javascript files to find unsafe regex (a.k.a. potentially catastrophic exponential-time regular expressions)
 
 ## Getting Started
 

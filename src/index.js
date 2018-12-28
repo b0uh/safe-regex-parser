@@ -9,43 +9,9 @@ const safe = require("safe-regex");
 const program = require("commander");
 
 const { display_result } = require("./output");
+const { getJsFiles } = require("./finder");
 
 const config = {};
-
-function get_js_files(args, includeNodeModules = false) {
-    let js_files = [];
-
-    for (const item of args) {
-        if (fs.existsSync(item)) {
-            const stats = fs.lstatSync(item);
-
-            if (stats.isFile()) {
-                const file = item;
-                const file_ext = file.split(".").pop();
-
-                if (file_ext === "js") {
-                    js_files.push(file);
-                }
-            } else if (stats.isDirectory()) {
-                const directory = item;
-
-                let directory_files = fs.readdirSync(directory);
-                if (!includeNodeModules) {
-                    directory_files = directory_files.filter(
-                        (filename) => !filename.includes("node_modules"),
-                    );
-                }
-                const directory_files_path = directory_files.map((el) =>
-                    path.join(directory, el),
-                );
-
-                js_files = js_files.concat(get_js_files(directory_files_path));
-            }
-        }
-    }
-
-    return js_files;
-}
 
 function analyze_file(filename) {
     const contents = fs.readFileSync(filename, "utf8");
@@ -98,7 +64,7 @@ function setConfig(program) {
 }
 
 function main(program) {
-    const files = get_js_files(config["args"], config["includeNodeModules"]);
+    const files = getJsFiles(config["args"], config["includeNodeModules"]);
 
     const results = {};
 
