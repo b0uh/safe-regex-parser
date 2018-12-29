@@ -20,4 +20,7 @@ jobs:
             - ./node_modules
       - run:
           name: test
-          command: npm test
+          command: npm run test
+      - run:
+          name: test
+          command: npm run prettier
