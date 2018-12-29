@@ -1,6 +1,6 @@
 {
   "name": "safe-regex-parser",
-  "version": "0.0.1-alpha",
+  "version": "0.0.2-alpha",
   "description": "Parse javascript files to find unsafe regex (a.k.a. potentially catastrophic exponential-time regular expressions)",
   "keywords": [
     "regex",
@@ -28,6 +28,9 @@
   "files": [
     "src/"
   ],
+  "bin": {
+    "srp": "./src/srp.js"
+  },
   "prettier": {
     "tabWidth": 4,
     "trailingComma": "all",

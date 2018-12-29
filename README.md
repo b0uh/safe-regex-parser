@@ -10,7 +10,7 @@ Parse javascript files to find unsafe regex (a.k.a. potentially catastrophic exp
 ## Getting Started
 
 ```
-node src/index.js path/to/my/awsome/project/*.js
+srp path/to/my/awsome/project/*.js
 ```
 
 ### Prerequisites
