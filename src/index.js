@@ -7,6 +7,7 @@ const program = require("commander");
 const { display_result } = require("./output");
 const { getJsFiles } = require("./finder");
 const { analyzeFile } = require("./parser");
+const { isSafe } = require("./tester");
 
 const config = {};
 
@@ -23,8 +24,25 @@ function main(program) {
     const results = {};
 
     for (const filename of files) {
-        const file_result = analyzeFile(filename);
-        results[filename] = file_result;
+        results[filename] = {
+            safeRegex: [],
+            unsafeRegex: [],
+            errors: [],
+        };
+
+        try {
+            const regexList = analyzeFile(filename);
+
+            for (const regexObject of regexList) {
+                if (isSafe(regexObject["regex"])) {
+                    results[filename]["safeRegex"].push(regexObject);
+                } else {
+                    results[filename]["unsafeRegex"].push(regexObject);
+                }
+            }
+        } catch (error) {
+            results[filename]["errors"].push(error);
+        }
     }
 
     display_result(results, config["outputFormat"], config["includeSafeRegex"]);

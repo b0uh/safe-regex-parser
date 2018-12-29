@@ -14,39 +14,25 @@ function analyzeFile(filename) {
         allowImportExportEverywhere: true,
         locations: true,
     };
-    const result = {
-        errors: [],
-        safeRegex: [],
-        unsafeRegex: [],
-    };
+    const regexList = [];
 
-    try {
-        const ast = acorn.parse(contents, options);
+    const ast = acorn.parse(contents, options);
 
-        walk.simple(ast, {
-            Literal: function(node) {
-                if (node.hasOwnProperty("regex")) {
-                    const regex =
-                        "/" + node.regex.pattern + "/" + node.regex.flags;
-                    const stats = {
-                        regex: regex,
-                        line: node.loc.start.line,
-                        column: node.loc.start.column,
-                    };
+    walk.simple(ast, {
+        Literal: function(node) {
+            if (node.hasOwnProperty("regex")) {
+                const regex = "/" + node.regex.pattern + "/" + node.regex.flags;
 
-                    if (safe(regex)) {
-                        result.safeRegex.push(stats);
-                    } else {
-                        result.unsafeRegex.push(stats);
-                    }
-                }
-            },
-        });
-    } catch (err) {
-        result.errors.push(err);
-    }
+                regexList.push({
+                    regex: regex,
+                    line: node.loc.start.line,
+                    column: node.loc.start.column,
+                });
+            }
+        },
+    });
 
-    return result;
+    return regexList;
 }
 
 exports.analyzeFile = analyzeFile;
