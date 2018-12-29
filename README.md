@@ -1,3 +1,4 @@
+[![npm version](https://badge.fury.io/js/safe-regex-parser.svg)](https://badge.fury.io/js/safe-regex-parser) [![CircleCI](https://circleci.com/gh/b0uh/safe-regex-parser.svg?style=svg)](https://circleci.com/gh/b0uh/safe-regex-parser)
 
 > :warning: Warning: This module is still experimental. It should not be used in production.
 
