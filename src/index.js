@@ -6,7 +6,7 @@ const program = require("commander");
 
 const { display_result } = require("./output");
 const { getJsFiles } = require("./finder");
-const { analyzeFile } = require("./parser");
+const { findRegexes } = require("./parser");
 const { isSafe } = require("./tester");
 
 const config = {};
@@ -31,7 +31,7 @@ function main(program) {
         };
 
         try {
-            const regexList = analyzeFile(filename);
+            const regexList = findRegexes(filename);
 
             for (const regexObject of regexList) {
                 if (isSafe(regexObject["regex"])) {

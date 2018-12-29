@@ -6,7 +6,7 @@ const acorn = require("acorn");
 const safe = require("safe-regex");
 const walk = require("acorn/dist/walk");
 
-function analyzeFile(filename) {
+function findRegexes(filename) {
     const contents = fs.readFileSync(filename, "utf8");
     const options = {
         ecmaVersion: 9,
@@ -35,4 +35,4 @@ function analyzeFile(filename) {
     return regexList;
 }
 
-exports.analyzeFile = analyzeFile;
+exports.findRegexes = findRegexes;
