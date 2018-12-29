@@ -1,23 +1,41 @@
 version: 2
 jobs:
   build:
+    working_directory: ~/safe-regex-parser
     docker:
       - image: circleci/node
     steps:
       - checkout
-      - run: npm install
+      - run:
+          name: Update npm
+          command: 'sudo npm install -g npm@latest'
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: Install npm wee
+          command: npm install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - node_modules
+
   test:
     docker:
       - image: circleci/node
     steps:
       - checkout
-      - run: npm run test
+      - run:
+          name: Test
+          command: npm run test
   lint:
     docker:
       - image: circleci/node
     steps:
       - checkout
-      - run: npm run prettier
+      - run:
+          name: Linter
+          command: npm run prettier
+
 workflows:
   version: 2
   build_and_test:
@@ -26,6 +44,12 @@ workflows:
       - test:
           requires:
             - build
+          filters:
+            branches:
+              only: master
       - lint:
           requires:
             - build
+          filters:
+            branches:
+              only: master
