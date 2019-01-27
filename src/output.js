@@ -58,6 +58,6 @@ exports.display_result = function(
             }
         }
     } else if (format === "json") {
-        console.log(results);
+        console.log(JSON.stringify(results, null, 4));
     }
 };

@@ -34,6 +34,18 @@ npm i
 -h, --help                    output usage information
 ```
 
+### API
+```
+const { srp } = require('safe-regex-parser');
+
+const config = {
+    pathes: ['./path/to/my/awsome/project/*.js'],
+};
+
+const result = srp(config);
+```
+
+
 ## TODO
 
 - Tests

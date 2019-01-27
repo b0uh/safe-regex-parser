@@ -11,18 +11,21 @@ const { getJsFiles } = require("./finder");
 const { findRegexes } = require("./parser");
 const { isSafe } = require("./tester");
 
-const config = {};
 
 function setConfig(program) {
-    config["args"] = program.args;
+    const config = {};
+
+    config["pathes"] = program.args ? program.args : program.pathes;
     config["outputFormat"] = program.outputFormat;
     config["includeNodeModules"] = program.includeNodeModules ? true : false;
     config["includeSafeRegex"] = program.all ? true : false;
+    config["engine"] = program.engine;
+
+    return config;
 }
 
-function main(program) {
-    const files = getJsFiles(config["args"], config["includeNodeModules"]);
-
+function srp(config) {
+    const files = getJsFiles(config["pathes"], config["includeNodeModules"]);
     const results = {};
 
     for (const filename of files) {
@@ -36,7 +39,7 @@ function main(program) {
             const regexList = findRegexes(filename);
 
             for (const regexObject of regexList) {
-                if (isSafe(regexObject["regex"])) {
+                if (isSafe(regexObject["regex"], config["engine"])) {
                     results[filename]["safeRegex"].push(regexObject);
                 } else {
                     results[filename]["unsafeRegex"].push(regexObject);
@@ -47,7 +50,11 @@ function main(program) {
         }
     }
 
-    display_result(results, config["outputFormat"], config["includeSafeRegex"]);
+    if(config["outputFormat"]){
+        display_result(results, config["outputFormat"], config["includeSafeRegex"]);
+    }else{
+        return results;
+    }
 }
 
 if (require.main === module) {
@@ -65,10 +72,15 @@ if (require.main === module) {
             "-a, --all",
             "include safe and unsafe regex in the output, by default only the unsafe regex are included",
         )
+        .option(
+            "-e, --engine <engine-name>",
+            "engine used to detect if a regex is safe or not (safe-regex|re2)",
+            "safe-regex"
+        )
         .option("-v, --version", "output version information")
         .parse(process.argv);
 
-    setConfig(program);
+    const config = setConfig(program);
 
     if (program.hasOwnProperty("version")) {
         const packageFile = JSON.parse(fs.readFileSync("package.json", "utf8"));
@@ -76,6 +88,8 @@ if (require.main === module) {
     } else if (program.args.length == 0) {
         program.help();
     } else {
-        main(program);
+        srp(config);
     }
 }
+
+module.exports.srp = srp;
