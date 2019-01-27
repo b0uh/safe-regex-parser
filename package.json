@@ -1,6 +1,6 @@
 {
   "name": "safe-regex-parser",
-  "version": "0.0.2-alpha",
+  "version": "0.0.2",
   "description": "Parse javascript files to find unsafe regex (a.k.a. potentially catastrophic exponential-time regular expressions)",
   "keywords": [
     "regex",
